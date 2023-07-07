@@ -150,7 +150,7 @@ function calculateWinner(squares) {
 }
 
 function getPosition(i) {
-  if (i < 0 || i >= 9) {
+  if (isNaN(i) || i < 0 || i >= 9) {
     return [0,0]
   }
   const position = [
@@ -168,6 +168,9 @@ function getPosition(i) {
 }
 
 function getTurnChar(num) {
+  if (isNaN(i)) {
+    return 'Z';
+  }
   if (num % 2 === 0) {
       return 'O';
   } else {
