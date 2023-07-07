@@ -48,7 +48,8 @@ class Game extends React.Component {
     this.state = {
       history: [
         {
-          squares: Array(9).fill(null)
+          squares: Array(9).fill(null),
+          position: [0,0]
         }
       ],
       stepNumber: 0,
@@ -60,6 +61,7 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
+    const position = getPosition(i)
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
@@ -67,7 +69,8 @@ class Game extends React.Component {
     this.setState({
       history: history.concat([
         {
-          squares: squares
+          squares: squares,
+          position: position
         }
       ]),
       stepNumber: history.length,
@@ -91,9 +94,13 @@ class Game extends React.Component {
       const desc = move ?
         'Go to move #' + move :
         'Go to game start';
+      const info = move ?
+        ` ` + getTurnChar(move) + ` (${step.position[0]},${step.position[1]})`:
+        ``;
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          {info}
         </li>
       );
     });
@@ -140,6 +147,35 @@ function calculateWinner(squares) {
     }
   }
   return null;
+}
+
+function getPosition(i) {
+  if (isNaN(i) || i < 0 || i >= 9) {
+    return [0,0]
+  }
+  const position = [
+    [1,1],
+    [1,2],
+    [1,3],
+    [2,1],
+    [2,2],
+    [2,3],
+    [3,1],
+    [3,2],
+    [3,3],
+    ]
+    return position[i]
+}
+
+function getTurnChar(num) {
+  if (isNaN(i)) {
+    return 'Z';
+  }
+  if (num % 2 === 0) {
+      return 'O';
+  } else {
+      return 'X';
+  }
 }
 
 export default Game;
