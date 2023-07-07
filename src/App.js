@@ -49,7 +49,7 @@ class Game extends React.Component {
       history: [
         {
           squares: Array(9).fill(null),
-          pos: [0,0]
+          position: [0,0]
         }
       ],
       stepNumber: 0,
@@ -61,7 +61,7 @@ class Game extends React.Component {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
     const squares = current.squares.slice();
-    const pos = getPos(i)
+    const position = getPosition(i)
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
@@ -70,7 +70,7 @@ class Game extends React.Component {
       history: history.concat([
         {
           squares: squares,
-          pos: pos
+          position: position
         }
       ]),
       stepNumber: history.length,
@@ -92,11 +92,15 @@ class Game extends React.Component {
 
     const moves = history.map((step, move) => {
       const desc = move ?
-        'Go to move #' + move + '(' + step.pos[0] + ',' + step.pos[1] + ')' :
+        'Go to move #' + move :
         'Go to game start';
+      const info = move ?
+        ` ` + getTurnChar(move) + ` (${step.position[0]},${step.position[1]})`:
+        ``;
       return (
         <li key={move}>
           <button onClick={() => this.jumpTo(move)}>{desc}</button>
+          {info}
         </li>
       );
     });
@@ -145,11 +149,11 @@ function calculateWinner(squares) {
   return null;
 }
 
-function getPos(i) {
+function getPosition(i) {
   if (i < 0 || i >= 9) {
     return [0,0]
   }
-  const pos = [
+  const position = [
     [1,1],
     [1,2],
     [1,3],
@@ -160,7 +164,15 @@ function getPos(i) {
     [3,2],
     [3,3],
     ]
-    return pos[i]
+    return position[i]
+}
+
+function getTurnChar(num) {
+  if (num % 2 === 0) {
+      return 'O';
+  } else {
+      return 'X';
+  }
 }
 
 export default Game;
